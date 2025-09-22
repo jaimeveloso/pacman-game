@@ -39,9 +39,9 @@ const pacmanBall = {
 }
 
 const ball = {
-    x: 100,
-    y: 100,
     radius: 5,
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
     color: 'grey',
     draw: function() {
         ctx.beginPath();
@@ -53,35 +53,30 @@ const ball = {
   }
 
 function draw(){
+    if(pacmanBall.x < 15){
+      keys.ArrowLeft = false
+    }
+    if(pacmanBall.y  < 15){
+      keys.ArrowUp = false
+    }
+    if(canvas.clientWidth < pacmanBall.radius + pacmanBall.x) {
+      keys.ArrowRight = false
+    }
+    if(canvas.clientHeight < pacmanBall.radius + pacmanBall.y){
+      keys.ArrowDown = false
+    }
+
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.height)
     if (keys.ArrowRight) {pacmanBall.x += pacmanBall.velocityXRight}
     if (keys.ArrowLeft) {pacmanBall.x -= pacmanBall.velocityXLeft}
     if (keys.ArrowUp) {pacmanBall.y -= pacmanBall.velocityYUp}
     if (keys.ArrowDown) {pacmanBall.y += pacmanBall.velocityYDown}
-
-    //-----//
-
-    if(pacmanBall.x < 15){
-      console.log('colision a la izquierda')
-    }
-    if(pacmanBall.y  < 15){
-      console.log('colision arriba')
-    }
-    if(canvas.clientWidth < pacmanBall.radius + pacmanBall.x){
-      pacmanBall.velocityXRight = 0
-      console.log('colision a la derecha')
-    }
-    if(canvas.clientHeight < pacmanBall.radius + pacmanBall.y){
-      console.log('colision abajo')
-    }
-
-    //-----//
     
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
     if (distance < 20){
       ball.color= 'transparent' 
     }
-    
+ 
     pacmanBall.draw()
     ball.draw()
     requestAnimationFrame(draw)
