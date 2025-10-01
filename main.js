@@ -8,6 +8,8 @@ let keys = {
   ArrowDown: false
 }
 
+
+
 document.addEventListener('keydown', (event) => {
   if (event.key in keys) {
     keys[event.key] = true
@@ -37,12 +39,14 @@ const pacmanBall = {
       ctx.fill();
     }
 }
+let allBalls = []
 
 const ball = {
     radius: 5,
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
+    x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+    y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
     color: 'grey',
+    isTransparent: false,
     draw: function() {
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
@@ -51,6 +55,22 @@ const ball = {
         ctx.fill();
     }
   }
+  
+const ball_2 = {
+    radius: 5,
+    x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+    y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
+    color: 'grey',
+    draw: function() {
+        ctx.beginPath();
+        ctx.arc(ball_2.x, ball_2.y, ball_2.radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fillStyle = ball_2.color;
+        ctx.fill();
+    }
+  }
+  allBalls.push(ball, ball_2)
+  console.log(allBalls)
 
 function draw(){
     if(pacmanBall.x < 15){
@@ -72,15 +92,31 @@ function draw(){
     if (keys.ArrowUp) {pacmanBall.y -= pacmanBall.velocityYUp}
     if (keys.ArrowDown) {pacmanBall.y += pacmanBall.velocityYDown}
     
+    
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
     if (distance < 20){
-      ball.color= 'transparent' 
+      ball.color= 'transparent'
+      setTimeout(()=>{
+      ball.color = 'grey',
+      ball.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+      ball.y =  Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
+    }, 1000)
     }
- 
+    const distance_2 = Math.sqrt((pacmanBall.x - ball_2.x)*(pacmanBall.x - ball_2.x)+(pacmanBall.y - ball_2.y)*(pacmanBall.y - ball_2.y))
+    if (distance_2 < 20){
+      ball_2.color= 'transparent' 
+      setTimeout(()=>{
+        ball_2.color = 'grey',
+        ball_2.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+        ball_2.y = Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
+      }, 1000)
+    }
     pacmanBall.draw()
-    ball.draw()
+    allBalls[0].draw()
+    allBalls[1].draw()
     requestAnimationFrame(draw)
 }
 draw()
+
 
 
