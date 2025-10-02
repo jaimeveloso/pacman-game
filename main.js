@@ -1,6 +1,7 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
+let allBalls = []
 let keys = {
   ArrowLeft: false,
   ArrowRight: false,
@@ -39,7 +40,6 @@ const pacmanBall = {
       ctx.fill();
     }
 }
-let allBalls = []
 
 const ball = {
     radius: 5,
@@ -70,7 +70,6 @@ const ball_2 = {
     }
   }
   allBalls.push(ball, ball_2)
-  console.log(allBalls)
 
 function draw(){
     if(pacmanBall.x < 15){
