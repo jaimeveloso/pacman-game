@@ -1,6 +1,7 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
+let allBalls = []
 let keys = {
   ArrowLeft: false,
   ArrowRight: false,
@@ -40,8 +41,8 @@ const pacmanBall = {
 
 const ball = {
     radius: 5,
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
+    x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+    y: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
     color: 'grey',
     draw: function() {
         ctx.beginPath();
@@ -51,6 +52,22 @@ const ball = {
         ctx.fill();
     }
   }
+
+  const ball2 = {
+    radius: 5,
+    x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+    y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
+    color: 'grey',
+    draw: function() {
+        ctx.beginPath();
+        ctx.arc(ball2.x, ball2.y, ball2.radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fillStyle = ball2.color;
+        ctx.fill();
+    }
+  }
+
+  allBalls.push(ball, ball2)
 
 function draw(){
     if(pacmanBall.x < 15){
@@ -74,11 +91,27 @@ function draw(){
     
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
     if (distance < 20){
-      ball.color= 'transparent' 
+        ball.color= 'transparent'
+        setTimeout(()=>{
+        ball.color = 'grey',
+        ball.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+        ball.y =  Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
+      }, 1000)
+    }
+
+    const distance_2 = Math.sqrt((pacmanBall.x - ball2.x)*(pacmanBall.x - ball2.x)+(pacmanBall.y - ball2.y)*(pacmanBall.y - ball2.y))
+    if (distance_2 < 20){
+      ball2.color= 'transparent' 
+      setTimeout(()=>{
+        ball2.color = 'grey',
+        ball2.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+        ball2.y = Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
+      }, 1000)
     }
  
     pacmanBall.draw()
-    ball.draw()
+    allBalls[0].draw()
+    allBalls[1].draw()
     requestAnimationFrame(draw)
 }
 draw()
