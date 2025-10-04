@@ -2,3 +2,7 @@ canvas{
     border:2px solid red;
     background: black;
 }
+#points{
+    color:white;
+    position:absolute;
+}

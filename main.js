@@ -1,7 +1,8 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
+const points = document.getElementById('points')
 
-let allBalls = []
+let totalPoints = 0
 let keys = {
   ArrowLeft: false,
   ArrowRight: false,
@@ -42,8 +43,9 @@ const pacmanBall = {
 const ball = {
     radius: 5,
     x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-    y: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+    y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
     color: 'grey',
+    isTransparent: false,
     draw: function() {
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
@@ -52,8 +54,8 @@ const ball = {
         ctx.fill();
     }
   }
-
-  const ball2 = {
+  
+const ball2 = {
     radius: 5,
     x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
     y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
@@ -66,9 +68,7 @@ const ball = {
         ctx.fill();
     }
   }
-
-  allBalls.push(ball, ball2)
-
+  
 function draw(){
     if(pacmanBall.x < 15){
       keys.ArrowLeft = false
@@ -90,30 +90,31 @@ function draw(){
     if (keys.ArrowDown) {pacmanBall.y += pacmanBall.velocityYDown}
     
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
-    if (distance < 20){
-        ball.color= 'transparent'
-        setTimeout(()=>{
-        ball.color = 'grey',
-        ball.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-        ball.y =  Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
-      }, 1000)
+    if (distance < 20 && ball.color === 'grey'){
+      ball.color= 'transparent'
+      setTimeout(()=>{
+      ball.color = 'grey',
+      totalPoints++
+      ball.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+      ball.y =  Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
+    }, 400)
     }
-
-    const distance_2 = Math.sqrt((pacmanBall.x - ball2.x)*(pacmanBall.x - ball2.x)+(pacmanBall.y - ball2.y)*(pacmanBall.y - ball2.y))
-    if (distance_2 < 20){
+    const distance2 = Math.sqrt((pacmanBall.x - ball2.x)*(pacmanBall.x - ball2.x)+(pacmanBall.y - ball2.y)*(pacmanBall.y - ball2.y))
+    if (distance2 < 20 && ball2.color === 'grey'){
       ball2.color= 'transparent' 
       setTimeout(()=>{
         ball2.color = 'grey',
+        totalPoints++
         ball2.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
         ball2.y = Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
-      }, 1000)
+      }, 400)
     }
- 
+
+    points.textContent = `Points: ${totalPoints}`
+  
     pacmanBall.draw()
-    allBalls[0].draw()
-    allBalls[1].draw()
+    ball.draw()
+    ball2.draw()
     requestAnimationFrame(draw)
 }
 draw()
-
-
