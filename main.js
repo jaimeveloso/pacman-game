@@ -10,6 +10,8 @@ let keys = {
   ArrowDown: false
 }
 
+
+
 document.addEventListener('keydown', (event) => {
   if (event.key in keys) {
     keys[event.key] = true
@@ -45,6 +47,7 @@ const ball = {
     x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
     y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
     color: 'grey',
+    isTransparent: false,
     draw: function() {
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
@@ -87,6 +90,7 @@ function draw(){
     if (keys.ArrowLeft) {pacmanBall.x -= pacmanBall.velocityXLeft}
     if (keys.ArrowUp) {pacmanBall.y -= pacmanBall.velocityYUp}
     if (keys.ArrowDown) {pacmanBall.y += pacmanBall.velocityYDown}
+    
     
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
     if (distance < 20 && ball.color === 'grey'){
