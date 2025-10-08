@@ -1,7 +1,8 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
+const points = document.getElementById('points')
 
-let allBalls = []
+let totalPoints = 0
 let keys = {
   ArrowLeft: false,
   ArrowRight: false,
@@ -56,21 +57,20 @@ const ball = {
     }
   }
   
-const ball_2 = {
+const ball2 = {
     radius: 5,
     x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
     y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
     color: 'grey',
     draw: function() {
         ctx.beginPath();
-        ctx.arc(ball_2.x, ball_2.y, ball_2.radius, 0, Math.PI * 2, true);
+        ctx.arc(ball2.x, ball2.y, ball2.radius, 0, Math.PI * 2, true);
         ctx.closePath();
-        ctx.fillStyle = ball_2.color;
+        ctx.fillStyle = ball2.color;
         ctx.fill();
     }
   }
-  allBalls.push(ball, ball_2)
-
+  
 function draw(){
     if(pacmanBall.x < 15){
       keys.ArrowLeft = false
@@ -93,29 +93,31 @@ function draw(){
     
     
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
-    if (distance < 20){
+    if (distance < 20 && ball.color === 'grey'){
       ball.color= 'transparent'
       setTimeout(()=>{
       ball.color = 'grey',
+      totalPoints++
       ball.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
       ball.y =  Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
-    }, 1000)
+    }, 400)
     }
-    const distance_2 = Math.sqrt((pacmanBall.x - ball_2.x)*(pacmanBall.x - ball_2.x)+(pacmanBall.y - ball_2.y)*(pacmanBall.y - ball_2.y))
-    if (distance_2 < 20){
-      ball_2.color= 'transparent' 
+    const distance2 = Math.sqrt((pacmanBall.x - ball2.x)*(pacmanBall.x - ball2.x)+(pacmanBall.y - ball2.y)*(pacmanBall.y - ball2.y))
+    if (distance2 < 20 && ball2.color === 'grey'){
+      ball2.color= 'transparent' 
       setTimeout(()=>{
-        ball_2.color = 'grey',
-        ball_2.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-        ball_2.y = Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
-      }, 1000)
+        ball2.color = 'grey',
+        totalPoints++
+        ball2.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
+        ball2.y = Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
+      }, 400)
     }
+
+    points.textContent = `Points: ${totalPoints}`
+  
     pacmanBall.draw()
-    allBalls[0].draw()
-    allBalls[1].draw()
+    ball.draw()
+    ball2.draw()
     requestAnimationFrame(draw)
 }
 draw()
-
-
-
