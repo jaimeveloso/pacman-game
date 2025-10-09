@@ -11,6 +11,8 @@ let keys = {
   ArrowDown: false
 }
 
+
+
 document.addEventListener('keydown', (event) => {
   if (event.key in keys) {
     keys[event.key] = true
@@ -113,6 +115,7 @@ function draw(){
     if (keys.ArrowLeft) {pacmanBall.x -= pacmanBall.velocityXLeft}
     if (keys.ArrowUp) {pacmanBall.y -= pacmanBall.velocityYUp}
     if (keys.ArrowDown) {pacmanBall.y += pacmanBall.velocityYDown}
+    
     
     const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
     if (distance < 20 && ball.color === 'grey'){
