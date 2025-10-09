@@ -2,6 +2,7 @@ const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 const points = document.getElementById('points')
 
+const BLOCK_SIZE = 50
 let totalPoints = 0
 let keys = {
   ArrowLeft: false,
@@ -24,9 +25,34 @@ document.addEventListener('keyup', (event) => {
   }
 })
 
+  const map = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+]
+
+function drawmap(){
+  for(let i = 0; i < map.length; i++){
+    for(let n = 0; n < map[i].length; n++){
+      if(map[i][n] === 1){
+        ctx.fillStyle = 'blue'
+        ctx.fillRect(n * BLOCK_SIZE, i * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+      } 
+    }
+  }
+}
+
 const pacmanBall = {
-  x: 400,
-  y: 400,
+  x: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
+  y: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
   radius: 15,
   velocityXRight: 1,
   velocityXLeft: 1, 
@@ -44,10 +70,9 @@ const pacmanBall = {
 
 const ball = {
     radius: 5,
-    x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-    y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
+    x: 3 * BLOCK_SIZE + BLOCK_SIZE / 2,
+    y: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
     color: 'grey',
-    isTransparent: false,
     draw: function() {
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
@@ -59,8 +84,8 @@ const ball = {
   
 const ball2 = {
     radius: 5,
-    x: Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-    y: Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5,
+    x: 7 * BLOCK_SIZE + BLOCK_SIZE / 2,
+    y: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
     color: 'grey',
     draw: function() {
         ctx.beginPath();
@@ -113,11 +138,12 @@ function draw(){
       }, 400)
     }
 
-    points.textContent = `Points: ${totalPoints}`
+    points.textContent = `SCORE:${totalPoints}`
   
     pacmanBall.draw()
     ball.draw()
     ball2.draw()
+    drawmap()
     requestAnimationFrame(draw)
 }
 draw()

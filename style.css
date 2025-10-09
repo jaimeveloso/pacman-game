@@ -3,6 +3,16 @@ canvas{
     background: black;
 }
 #points{
+    font-family:"Emulogic";
     color:white;
+    font-size: 30px;
     position:absolute;
+    padding-left: 183px;
+    padding-top:5px;
+}
+@font-face{
+    font-family:"Emulogic";
+    src: url('font-family/emulogic-font/Emulogic-zrEw.ttf') format('truetype');
+    font-style:normal;
+    font-weight:normal;
 }
