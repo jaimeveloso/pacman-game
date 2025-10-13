@@ -2,6 +2,7 @@ const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 const points = document.getElementById('points')
 
+const NUMBER_OF_BALLS = 10
 const BLOCK_SIZE = 50
 let totalPoints = 0
 let keys = {
@@ -11,32 +12,29 @@ let keys = {
   ArrowDown: false
 }
 
-
-
 document.addEventListener('keydown', (event) => {
   if (event.key in keys) {
     keys[event.key] = true
   }
 })
-
 document.addEventListener('keyup', (event) => {
   if (event.key in keys) {
     keys[event.key] = false
   }
 })
 
-  const map = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+const map = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
 function drawmap(){
@@ -54,10 +52,10 @@ const pacmanBall = {
   x: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
   y: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
   radius: 15,
-  velocityXRight: 1,
-  velocityXLeft: 1, 
-  velocityYUp: 1,
-  velocityYDown: 1,
+  velocityXRight: 2,
+  velocityXLeft: 2, 
+  velocityYUp: 2,
+  velocityYDown: 2,
   color: 'yellow',
   draw: function() {
       ctx.beginPath();
@@ -68,81 +66,64 @@ const pacmanBall = {
     }
 }
 
-const ball = {
-    radius: 5,
-    x: 3 * BLOCK_SIZE + BLOCK_SIZE / 2,
-    y: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
-    color: 'grey',
-    draw: function() {
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fillStyle = ball.color;
-        ctx.fill();
-    }
+const allBalls = []
+for (let i = 0; i < 10; i++){
+  const x = Math.floor(Math.random() * (canvas.width - 20)) + 10
+  const y = Math.floor(Math.random() * (canvas.width - 20)) + 10
+  if(!detectBlockCollision(x, y)){
+    allBalls.push({x, y, radius: 5, color: 'grey'})
+  } else {
+    i--
   }
-  
-const ball2 = {
-    radius: 5,
-    x: 7 * BLOCK_SIZE + BLOCK_SIZE / 2,
-    y: 1 * BLOCK_SIZE + BLOCK_SIZE / 2,
-    color: 'grey',
-    draw: function() {
-        ctx.beginPath();
-        ctx.arc(ball2.x, ball2.y, ball2.radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fillStyle = ball2.color;
-        ctx.fill();
-    }
+}
+
+function detectBlockCollision(x, y){
+  const blockX = Math.floor(x / BLOCK_SIZE)
+  const blockY = Math.floor(y / BLOCK_SIZE)
+  if(blockY < 0 || blockY >= map.length || blockX < 0 || blockX >= map[0].length){
+    return true
   }
-  
+  return map[blockY][blockX] === 1
+}
+
 function draw(){
-    if(pacmanBall.x < 15){
-      keys.ArrowLeft = false
-    }
-    if(pacmanBall.y  < 15){
-      keys.ArrowUp = false
-    }
-    if(canvas.clientWidth < pacmanBall.radius + pacmanBall.x) {
-      keys.ArrowRight = false
-    }
-    if(canvas.clientHeight < pacmanBall.radius + pacmanBall.y){
-      keys.ArrowDown = false
-    }
-
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.height)
-    if (keys.ArrowRight) {pacmanBall.x += pacmanBall.velocityXRight}
-    if (keys.ArrowLeft) {pacmanBall.x -= pacmanBall.velocityXLeft}
-    if (keys.ArrowUp) {pacmanBall.y -= pacmanBall.velocityYUp}
-    if (keys.ArrowDown) {pacmanBall.y += pacmanBall.velocityYDown}
-    
-    
-    const distance = Math.sqrt((pacmanBall.x - ball.x)*(pacmanBall.x - ball.x)+(pacmanBall.y - ball.y)*(pacmanBall.y - ball.y))
-    if (distance < 20 && ball.color === 'grey'){
-      ball.color= 'transparent'
-      setTimeout(()=>{
-      ball.color = 'grey',
-      totalPoints++
-      ball.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-      ball.y =  Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
-    }, 400)
+    if (keys.ArrowRight && !detectBlockCollision(pacmanBall.x + pacmanBall.radius + 1, pacmanBall.y)) {
+      pacmanBall.x += pacmanBall.velocityXRight
     }
-    const distance2 = Math.sqrt((pacmanBall.x - ball2.x)*(pacmanBall.x - ball2.x)+(pacmanBall.y - ball2.y)*(pacmanBall.y - ball2.y))
-    if (distance2 < 20 && ball2.color === 'grey'){
-      ball2.color= 'transparent' 
-      setTimeout(()=>{
-        ball2.color = 'grey',
+    if (keys.ArrowLeft && !detectBlockCollision(pacmanBall.x - pacmanBall.radius - 1, pacmanBall.y)) {
+      pacmanBall.x -= pacmanBall.velocityXLeft
+    }
+    if (keys.ArrowUp && !detectBlockCollision(pacmanBall.x, pacmanBall.y - pacmanBall.radius - 1)) {
+      pacmanBall.y -= pacmanBall.velocityYUp
+    }
+    if (keys.ArrowDown && !detectBlockCollision(pacmanBall.x, pacmanBall.y + pacmanBall.radius + 1)) {
+      pacmanBall.y += pacmanBall.velocityYDown
+    }
+    
+    for ( let i = 0; i < allBalls.length; i++){
+      const distance = Math.sqrt((pacmanBall.x - allBalls[i].x)*(pacmanBall.x - allBalls[i].x)+(pacmanBall.y - allBalls[i].y)*(pacmanBall.y - allBalls[i].y))
+      if (distance < 20 && allBalls[i].color === 'grey'){
+        allBalls[i].color= 'transparent'
         totalPoints++
-        ball2.x = Math.floor(Math.random() * (canvas.width - 2 * 5)) + 5,
-        ball2.y = Math.floor(Math.random() * (canvas.height - 2 * 5)) + 5
-      }, 400)
+      }
     }
-
-    points.textContent = `SCORE:${totalPoints}`
-  
+    function drawBall(allBalls){
+      ctx.beginPath()
+      ctx.arc(allBalls.x, allBalls.y, allBalls.radius, 0, Math.PI * 2, true)
+      ctx.fillStyle = allBalls.color
+      ctx.fill()
+    }
+    for(let i = 0; i < allBalls.length; i++){
+      drawBall(allBalls[i])
+    }
+ 
+    if(totalPoints === 10){
+      points.textContent = `YOU WIN!!`
+    } else {
+      points.textContent = `SCORE:${totalPoints}`
+    }
     pacmanBall.draw()
-    ball.draw()
-    ball2.draw()
     drawmap()
     requestAnimationFrame(draw)
 }
