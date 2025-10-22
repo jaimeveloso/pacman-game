@@ -1,14 +1,24 @@
+body{
+    display:flex;
+    justify-content:center;
+}
+
 canvas{
-    border:2px solid red;
+    border:2px solid rgb(105, 20, 20);
     background: black;
 }
 #points{
     font-family:"Emulogic";
-    color:white;
+    color:black;
     font-size: 30px;
     position:absolute;
-    padding-left: 165px;
     padding-top:5px;
+}
+#display{
+    position:absolute;
+    padding-top:505px;
+    font-size: 30px;
+    font-family:"Emulogic";
 }
 @font-face{
     font-family:"Emulogic";
