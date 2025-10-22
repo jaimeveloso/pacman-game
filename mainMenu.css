@@ -2,7 +2,7 @@ body{
     display:flex;
     justify-content:center;
 }
-#menu-container{
+.menu-container{
     background-image: url("images&music/menu-image.png");
     background-repeat:no-repeat;
     background-size:cover;
